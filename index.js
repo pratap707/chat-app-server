@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 
 // Define a port for the server to listen on
-const PORT = 3000;
+const PORT = 2000;
 
 // Define a route for the home page
 app.get('/', (req, res) => {
@@ -18,3 +18,4 @@ app.get('/about',(req,res)=>{
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
