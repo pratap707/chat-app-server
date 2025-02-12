@@ -1,12 +1,12 @@
+import WebSocket from 'ws';
+
+const wss = new WebSocket.Server({ port:2000 });
+
 import { createClient } from '@supabase/supabase-js';
-import 'dotenv/config';
-import { WebSocketServer } from 'ws';
-const wss = new WebSocketServer({ port: 2000 });
 
-const supabaseUrl = 'https://nivegovqqkwkqjpfgofz.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-
- export const  supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = 'https://nivegovqqkwkqjpfgofz.supabase.co'
+const supabaseKey = process.env.SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)
 wss.on('connection', (ws) => {
   console.log('New client connected!');
 
@@ -15,7 +15,7 @@ wss.on('connection', (ws) => {
 
     // Broadcast the message to all connected clients
     wss.clients.forEach((client) => {
-      if (client.readyState === ws.OPEN) {
+      if (client.readyState === WebSocket.OPEN) {
         client.send(message);
       }
     });

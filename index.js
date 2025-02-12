@@ -1,21 +1,39 @@
 // Import the Express module
-const express = require('express');
+import express from 'express'; // Fixed extra space
+import { supabase } from './src/database/config.js';
 
-// Create an instance of an Express application
 const app = express();
+const PORT = 2001;
 
-// Define a port for the server to listen on
-const PORT = 2000;
+// Middleware to parse JSON requests
+app.use(express.json());
 
-// Define a route for the home page
+// Home Route
 app.get('/', (req, res) => {
     res.send('Welcome to the Home Route!');
 });
-app.get('/about',(req,res)=>{
-    res.send("Welcome to the about page")
-})
-// Start the server and listen on the specified port
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+
+// About Route
+app.get('/about', (req, res) => {
+    res.send('Welcome to the About Page');
 });
 
+// Fetch Users from Supabase
+app.get('/fetchUsers', async (req, res) => {
+    try {
+        let { data: users, error } = await supabase.from('users').select('*');
+
+        if (error) {
+            throw error; // Handle Supabase error
+        }
+
+        res.json({ success: true, users }); // Send data as JSON
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// Start the Server
+app.listen(PORT, () => {
+    console.log(`✅ Server is running on http://localhost:${PORT}`);
+});
