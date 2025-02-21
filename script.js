@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import 'dotenv/config';
 import { WebSocketServer } from 'ws';
-const wss = new WebSocketServer({ port: 2000 });
+const wss = new WebSocketServer({ port: 2001 });
 
 const supabaseUrl = 'https://nivegovqqkwkqjpfgofz.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
@@ -26,4 +26,6 @@ wss.on('connection', (ws) => {
   });
 });
 
-console.log('WebSocket server is running on ws://localhost:2000');
+console.log('WebSocket server is running on ws://localhost:2001');
+
+
