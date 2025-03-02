@@ -9,22 +9,52 @@ const PORT = 2001;
 app.use(cors());
 app.use(express.json()); // Parses incoming JSON requests
 
-// Home Route
-app.get("/", (req, res) => {
-  res.send("Welcome to the Home Route!");
-});
 
-// About Route
-app.get("/about", (req, res) => {
-  res.send("Welcome to the About Page");
-});
-app.post("/signIn", (req, res) => {
+app.post("/signIn",async (req, res) => {
+  const {email,password } = req.body;
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .insert([
+        { email: email, password: password,username:email },
+      ])
+      .select()
+              
+    
+  } catch (error) {
+    throw error;
+    console.log("this is the error from database");
+  }
     console.log("signIn route")
-    res.send("Welcome to the signIn Page");
+    res.json({ auth: "true" });
   });
 
+  
+  // Home Route
+  app.get("/", async (req, res) => {
+    try {
+      // Ensure 'getstart' is a valid column
+      const { data, error } = await supabase
+        .from("users")
+        .insert([{ getstart: "User started" }])
+        .select();
+  
+      if (error) {
+        console.error("Database error:", error);
+        return res.status(500).json({ error: "Database insertion failed" });
+      }
+  
+      res.json({ auth: "true", message: "Welcome to the Home Route!", data });
+  
+    } catch (error) {
+      console.error("Error in Home Route:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+  
+
 // API Message Route
-app.get("/api/message", (req, res) => {
+app.get("/message", (req, res) => {
   res.json({ message: "Hello from the backend!" });
 });
 
